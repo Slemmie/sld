@@ -16,6 +16,8 @@
 #include <sld/exception.h>
 #include <sld/vector.h>
 #include <sld/algorithm.h>
+#include <sld/atexit.h>
+#include <sld/stdout.h>
 
 // end sld headers
 // --------------------------------
