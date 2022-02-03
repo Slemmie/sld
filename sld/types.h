@@ -31,7 +31,8 @@ typedef float        double4;
 typedef double       double8;
 typedef long double double12;
 
-typedef uint8 byte;
+typedef uint8        byte;
+typedef  int8 signed_byte;
 
 _SLD_END
 
