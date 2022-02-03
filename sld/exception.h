@@ -47,6 +47,62 @@ namespace except {
 		
 	};
 	
+	class stdout_buffer_pointer_overflow : public _SLD exception {
+		
+	public:
+		
+		stdout_buffer_pointer_overflow() noexcept :
+		_SLD exception("stdout buffer pointer overflow")
+		{ }
+		
+		stdout_buffer_pointer_overflow(const char* _message) noexcept :
+		_SLD exception(_message)
+		{ }
+		
+	};
+	
+	class unsupported_number_base : public _SLD exception {
+		
+	public:
+		
+		unsupported_number_base() noexcept :
+		_SLD exception("unsupported number base")
+		{ }
+		
+		unsupported_number_base(const char* _message) noexcept :
+		_SLD exception(_message)
+		{ }
+		
+	};
+	
+	class stdout_putint_overflow : public _SLD exception {
+		
+	public:
+		
+		stdout_putint_overflow() noexcept :
+		_SLD exception("stdout putint() overflow")
+		{ }
+		
+		stdout_putint_overflow(const char* _message) noexcept :
+		_SLD exception(_message)
+		{ }
+		
+	};
+	
+	class invalid_put_args : public _SLD exception {
+		
+	public:
+		
+		invalid_put_args() noexcept :
+		_SLD exception("stdout putint() overflow")
+		{ }
+		
+		invalid_put_args(const char* _message) noexcept :
+		_SLD exception(_message)
+		{ }
+		
+	};
+	
 } /// namespace except
 
 _SLD_END
