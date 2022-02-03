@@ -11,6 +11,11 @@
 // begin sld headers
 
 #include <sld/core.h>
+#include <sld/types.h>
+#include <sld/memory.h>
+#include <sld/exception.h>
+#include <sld/vector.h>
+#include <sld/algorithm.h>
 
 // end sld headers
 // --------------------------------
