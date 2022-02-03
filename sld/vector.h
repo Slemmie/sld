@@ -56,10 +56,10 @@ public:
 	}
 	
 	inline void clear() noexcept {
-		if (m_data) {
-			delete [] (m_data);
-			m_data = nullptr;
-			m_size = m_capacity = 0;
+		if (this->m_data) {
+			delete [] (this->m_data);
+			this->m_data = nullptr;
+			this->m_size = this->m_capacity = 0;
 		}
 	}
 	
@@ -86,11 +86,11 @@ public:
 			return;
 		}
 		if (_size <= this->capacity()) {
-			m_size = _size;
+			this->m_size = _size;
 			return;
 		}
-		reserve(_size);
-		m_size = _size;
+		this->reserve(_size);
+		this->m_size = _size;
 	}
 	
 	inline void resize(uint64 _size, const A& _initial) {
@@ -105,14 +105,14 @@ public:
 	
 	inline void push_back(const A& _value) noexcept {
 		this->reserve(this->size() + 1);
-		m_data[m_size++] = _value;
+		this->m_data[this->m_size++] = _value;
 	}
 	
 	inline void pop_back() {
 		if (this->empty()) {
-			m_throw_bounds();
+			this->m_throw_bounds();
 		}
-		(&m_data[--m_size])->~A();
+		(&this->m_data[--this->m_size])->~A();
 	}
 	
 	inline void insert(_SLD vector <A>::iterator _ptr, const A& _value) {
@@ -139,7 +139,7 @@ public:
 	
 	inline void erase(_SLD vector <A>::iterator _ptr) {
 		if (_ptr < this->begin() || _ptr >= this->end()) {
-			m_throw_bounds();
+			this->m_throw_bounds();
 		}
 		for (_SLD vector <A>::iterator it = _ptr; it + 1 != this->end(); ++it) {
 			*it = *(it + 1);
@@ -149,7 +149,7 @@ public:
 	
 	inline void erase(_SLD vector <A>::iterator _begin, _SLD vector <A>::iterator _end) {
 		if (_begin < this->begin() || _end > this->end() || _begin > _end) {
-			m_throw_bounds();
+			this->m_throw_bounds();
 		}
 		uint64 required_size = _end - _begin;
 		for (_SLD vector <A>::iterator it = _end; it != this->end(); ++it) {
@@ -174,53 +174,53 @@ public:
 	}
 	
 	constexpr const A& operator [] (const uint64 _index) const noexcept {
-		return m_data[_index];
+		return this->m_data[_index];
 	}
 	
 	inline A& operator [] (const uint64 _index) noexcept {
-		return m_data[_index];
+		return this->m_data[_index];
 	}
 	
 	constexpr const A& at(const uint64 _index) const {
 		if (_index >= this->size()) {
-			m_throw_bounds();
+			this->m_throw_bounds();
 		}
-		return m_data[_index];
+		return this->m_data[_index];
 	}
 	
 	inline A& at(const uint64 _index) {
 		if (_index >= this->size()) {
-			m_throw_bounds();
+			this->m_throw_bounds();
 		}
-		return m_data[_index];
+		return this->m_data[_index];
 	}
 	
 	constexpr const A& front() const {
 		if (this->empty()) {
-			m_throw_bounds();
+			this->m_throw_bounds();
 		}
-		return m_data[0];
+		return this->m_data[0];
 	}
 	
 	inline A& front() {
 		if (this->empty()) {
-			m_throw_bounds();
+			this->m_throw_bounds();
 		}
-		return m_data[0];
+		return this->m_data[0];
 	}
 	
 	constexpr const A& back() const {
 		if (this->empty()) {
-			m_throw_bounds();
+			this->m_throw_bounds();
 		}
-		return m_data[this->size() - 1];
+		return this->m_data[this->size() - 1];
 	}
 	
 	inline A& back() {
 		if (this->empty()) {
-			m_throw_bounds();
+			this->m_throw_bounds();
 		}
-		return m_data[this->size() - 1];
+		return this->m_data[this->size() - 1];
 	}
 	
 	constexpr const _SLD vector <A>::iterator begin() const noexcept {
@@ -261,7 +261,7 @@ private:
 private:
 	
 	constexpr bool m_fits(const uint64 _new_size) const noexcept {
-		return _new_size < m_capacity;
+		return _new_size < this->capacity();
 	}
 	
 private:
