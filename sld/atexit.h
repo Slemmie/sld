@@ -26,10 +26,10 @@ public:
 	}
 	
 	inline bool push(void (*_function) (void)) noexcept {
-		if (m_ptr == _SLD_ATEXIT_BUFFER_SIZE) {
+		if (this->m_ptr == _SLD_ATEXIT_BUFFER_SIZE) {
 			return false;
 		}
-		m_functions[m_ptr++] = _function;
+		this->m_functions[this->m_ptr++] = _function;
 		return true;
 	}
 	
@@ -41,8 +41,8 @@ private:
 	_sld_atexit_stack() { }
 	
 	~_sld_atexit_stack() {
-		for (; m_ptr; m_ptr--) {
-			m_functions[m_ptr - 1]();
+		for (; this->m_ptr; this->m_ptr--) {
+			this->m_functions[this->m_ptr - 1]();
 		}
 	}
 	
