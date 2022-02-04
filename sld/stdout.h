@@ -44,7 +44,7 @@ struct _sld_stderr_buffer {
 	
 };
 
-enum File_out_no : uint8 {
+enum file_out_no : uint8 {
 	stdout = 1,
 	stderr = 2
 };
@@ -65,7 +65,7 @@ inline void flush_stderr() noexcept {
 	}
 }
 
-inline void putchar(const char _ch, const _SLD File_out_no _fd = _SLD stdout) {
+inline void putchar(const char _ch, const _SLD file_out_no _fd = _SLD stdout) {
 	if (_fd == _SLD stdout) {
 		static bool is_atexit = false;
 		if (!is_atexit) {
@@ -97,13 +97,13 @@ inline void putchar(const char _ch, const _SLD File_out_no _fd = _SLD stdout) {
 	}
 }
 
-inline void putchars(const char* _chs, const _SLD File_out_no _fd = _SLD stdout) {
+inline void putchars(const char* _chs, const _SLD file_out_no _fd = _SLD stdout) {
 	for (uint64 i = 0; _chs[i] != '\0'; i++) {
 		_SLD putchar(_chs[i], _fd);
 	}
 }
 
-void putint(int64 _arg, const uint64 _base = 10, const _SLD File_out_no _fd = _SLD stdout) {
+void putint(int64 _arg, const uint64 _base = 10, const _SLD file_out_no _fd = _SLD stdout) {
 	if (_base > (uint64)16) {
 		throw _SLD except::unsupported_number_base();
 	}
@@ -126,7 +126,7 @@ void putint(int64 _arg, const uint64 _base = 10, const _SLD File_out_no _fd = _S
 	_SLD putchars(ptr + 1, _fd);
 }
 
-void putfloat(double12 _arg, const uint64 _precision = 3, const _SLD File_out_no _fd = _SLD stdout) {
+void putfloat(double12 _arg, const uint64 _precision = 3, const _SLD file_out_no _fd = _SLD stdout) {
 	if (_arg < double12(0)) {
 		_SLD putchar('-', _fd);
 		_arg = -_arg;
@@ -172,6 +172,8 @@ template <class... ARGS> inline void _sld_putchar
 template <class... ARGS> inline void _sld_putchars(ARGS... _args);
 template <> inline void _sld_putchars <const char*>
 (const char* _arg) { _SLD putchars(_arg); }
+template <> inline void _sld_putchars <char*>
+(char* _arg) { _SLD putchars(_arg); }
 template <class... ARGS> inline void _sld_putchars
 (ARGS... _args) { throw _SLD except::invalid_put_args(); }
 
@@ -189,6 +191,8 @@ _sld_overload(uint32)
 _sld_overload( int32)
 _sld_overload(uint64)
 _sld_overload( int64)
+_sld_overload(  char)
+_sld_overload(  long)
 _sld_overload( double4)
 _sld_overload( double8)
 _sld_overload(double12)
@@ -267,32 +271,32 @@ void printf(const char* _format, const ARG& _arg, const ARGS&... _args) {
 	}
 }
 
-void printf(const _SLD File_out_no _fd, const char* _format) {
+void printf(const _SLD file_out_no _fd, const char* _format) {
 	_SLD putchars(_format, _fd);
 }
 
-template <class... ARGS> inline void _sld_putchar(const _SLD File_out_no _fd, const ARGS&... _args);
+template <class... ARGS> inline void _sld_putchar(const _SLD file_out_no _fd, const ARGS&... _args);
 template <> inline void _sld_putchar <signed char  >
-(const _SLD File_out_no _fd, const signed char& _arg) { _SLD putchar((char)_arg, _fd); }
+(const _SLD file_out_no _fd, const signed char& _arg) { _SLD putchar((char)_arg, _fd); }
 template <> inline void _sld_putchar <unsigned char>
-(const _SLD File_out_no _fd, const unsigned char& _arg) { _SLD putchar((char)_arg, _fd); }
+(const _SLD file_out_no _fd, const unsigned char& _arg) { _SLD putchar((char)_arg, _fd); }
 template <> inline void _sld_putchar <char         >
-(const _SLD File_out_no _fd, const char& _arg) { _SLD putchar((char)_arg, _fd); }
+(const _SLD file_out_no _fd, const char& _arg) { _SLD putchar((char)_arg, _fd); }
 template <class... ARGS> inline void _sld_putchar
-(const _SLD File_out_no _fd, const ARGS&... _args) { throw _SLD except::invalid_put_args(); }
+(const _SLD file_out_no _fd, const ARGS&... _args) { throw _SLD except::invalid_put_args(); }
 
-template <class... ARGS> inline void _sld_putchars(const _SLD File_out_no _fd, ARGS... _args);
+template <class... ARGS> inline void _sld_putchars(const _SLD file_out_no _fd, ARGS... _args);
 template <> inline void _sld_putchars <const char*>
-(const _SLD File_out_no _fd, const char* _arg) { _SLD putchars(_arg, _fd); }
+(const _SLD file_out_no _fd, const char* _arg) { _SLD putchars(_arg, _fd); }
 template <class... ARGS> inline void _sld_putchars
-(const _SLD File_out_no _fd, ARGS... _args) { throw _SLD except::invalid_put_args(); }
+(const _SLD file_out_no _fd, ARGS... _args) { throw _SLD except::invalid_put_args(); }
 
 #define _sld_overload(TYPE)                           \
 template <> inline void _sld_putint <TYPE>            \
-(const _SLD File_out_no _fd, const TYPE& _arg) { _SLD putint(_arg, (uint64)10, _fd); } \
+(const _SLD file_out_no _fd, const TYPE& _arg) { _SLD putint(_arg, (uint64)10, _fd); } \
 template <> inline void _sld_putint <TYPE, uint64>    \
-(const _SLD File_out_no _fd, const TYPE& _arg, const uint64& _base) { _SLD putint(_arg, _base, _fd); }
-template <class... ARGS> inline void _sld_putint(const _SLD File_out_no _fd, const ARGS&... _args);
+(const _SLD file_out_no _fd, const TYPE& _arg, const uint64& _base) { _SLD putint(_arg, _base, _fd); }
+template <class... ARGS> inline void _sld_putint(const _SLD file_out_no _fd, const ARGS&... _args);
 _sld_overload( uint8)
 _sld_overload(  int8)
 _sld_overload(uint16)
@@ -305,24 +309,24 @@ _sld_overload( double4)
 _sld_overload( double8)
 _sld_overload(double12)
 template <class... ARGS> inline void _sld_putint
-(const _SLD File_out_no _fd, const ARGS&... _args) { throw _SLD except::invalid_put_args(); }
+(const _SLD file_out_no _fd, const ARGS&... _args) { throw _SLD except::invalid_put_args(); }
 #undef _sld_overload
 
-template <class... ARGS> inline void _sld_putfloat(const _SLD File_out_no _fd, const ARGS&... _args);
+template <class... ARGS> inline void _sld_putfloat(const _SLD file_out_no _fd, const ARGS&... _args);
 template <> inline void _sld_putfloat <double12, uint64>
-(const _SLD File_out_no _fd, const double12& _arg, const uint64& _precision)
+(const _SLD file_out_no _fd, const double12& _arg, const uint64& _precision)
 { _SLD putfloat(_arg, _precision, _fd); }
 template <> inline void _sld_putfloat <double8, uint64>
-(const _SLD File_out_no _fd, const double8& _arg, const uint64& _precision)
+(const _SLD file_out_no _fd, const double8& _arg, const uint64& _precision)
 { _SLD putfloat(_arg, _precision, _fd); }
 template <> inline void _sld_putfloat <double4, uint64>
-(const _SLD File_out_no _fd, const double4& _arg, const uint64& _precision)
+(const _SLD file_out_no _fd, const double4& _arg, const uint64& _precision)
 { _SLD putfloat(_arg, _precision, _fd); }
 template <class... ARGS> inline void _sld_putfloat
-(const _SLD File_out_no _fd, const ARGS&... _args) { throw _SLD except::invalid_put_args(); }
+(const _SLD file_out_no _fd, const ARGS&... _args) { throw _SLD except::invalid_put_args(); }
 
 template <class ARG, class... ARGS>
-void printf(const _SLD File_out_no _fd, const char* _format, const ARG& _arg, const ARGS&... _args) {
+void printf(const _SLD file_out_no _fd, const char* _format, const ARG& _arg, const ARGS&... _args) {
 	for (uint64 i = 0; _format[i] != '\0'; i++) {
 		if (_format[i] != '%') {
 			_sld_putchar(_fd, _format[i]);
