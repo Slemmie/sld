@@ -91,7 +91,7 @@ inline void putchar(const char _ch, const _SLD File_out_no _fd = _SLD stdout) {
 			_SLD flush_stdout();
 		}
 	} else {
-		throw except::unsupported_file_desciptor();
+		throw _SLD except::unsupported_file_desciptor();
 	}
 }
 
