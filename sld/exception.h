@@ -61,6 +61,20 @@ namespace except {
 		
 	};
 	
+	class stderr_buffer_pointer_overflow : public _SLD exception {
+		
+	public:
+		
+		stderr_buffer_pointer_overflow() noexcept :
+		_SLD exception("stderr buffer pointer overflow")
+		{ }
+		
+		stderr_buffer_pointer_overflow(const char* _message) noexcept :
+		_SLD exception(_message)
+		{ }
+		
+	};
+	
 	class unsupported_number_base : public _SLD exception {
 		
 	public:
@@ -98,6 +112,20 @@ namespace except {
 		{ }
 		
 		invalid_put_args(const char* _message) noexcept :
+		_SLD exception(_message)
+		{ }
+		
+	};
+	
+	class unsupported_file_desciptor : public _SLD exception {
+		
+	public:
+		
+		unsupported_file_desciptor() noexcept :
+		_SLD exception("unsupported file desciptor")
+		{ }
+		
+		unsupported_file_desciptor(const char* _message) noexcept :
 		_SLD exception(_message)
 		{ }
 		
