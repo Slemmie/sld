@@ -157,10 +157,6 @@ void printf(const char* _format) {
 	_SLD putchars(_format);
 }
 
-void printf(const _SLD File_out_no _fd, const char* _format) {
-	_SLD putchars(_format, _fd);
-}
-
 template <class... ARGS> inline void _sld_putchar(const ARGS&... _args);
 template <> inline void _sld_putchar <signed char  >
 (const signed char& _arg) { _SLD putchar((char)_arg); }
@@ -267,6 +263,10 @@ void printf(const char* _format, const ARG& _arg, const ARGS&... _args) {
 			}
 		};
 	}
+}
+
+void printf(const _SLD File_out_no _fd, const char* _format) {
+	_SLD putchars(_format, _fd);
 }
 
 template <class... ARGS> inline void _sld_putchar(const _SLD File_out_no _fd, const ARGS&... _args);
