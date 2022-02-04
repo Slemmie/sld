@@ -105,8 +105,7 @@ void putfloat(double12 _arg, const uint64 _precision = 3) {
 		_SLD putchar('.');
 		for (uint64 i = 0; i < _precision; i++) {
 			tmp *= double12(10);
-			int32 current = int32(tmp) % 10;
-			tmp -= double12(current);
+			uint32 current = uint32(tmp) % 10;
 			_SLD putchar('0' + current);
 		}
 	}
