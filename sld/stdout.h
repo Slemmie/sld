@@ -51,14 +51,16 @@ enum File_out_no : uint8 {
 
 inline void flush_stdout() noexcept {
 	if (_SLD _sld_stdout_buffer::ptr) {
-		write(1, &_SLD _sld_stdout_buffer::buffer, sizeof(char) * _SLD _sld_stdout_buffer::ptr);
+		write(_SLD stdout, &_SLD _sld_stdout_buffer::buffer,
+		sizeof(char) * _SLD _sld_stdout_buffer::ptr);
 		_SLD _sld_stdout_buffer::ptr = 0;
 	}
 }
 
 inline void flush_stderr() noexcept {
 	if (_SLD _sld_stderr_buffer::ptr) {
-		write(2, &_SLD _sld_stderr_buffer::buffer, sizeof(char) * _SLD _sld_stderr_buffer::ptr);
+		write(_SLD stderr, &_SLD _sld_stderr_buffer::buffer,
+		sizeof(char) * _SLD _sld_stderr_buffer::ptr);
 		_SLD _sld_stderr_buffer::ptr = 0;
 	}
 }
