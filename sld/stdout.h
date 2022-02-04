@@ -102,7 +102,7 @@ inline void putchars(const char* _chs, const _SLD File_out_no _fd = _SLD stdout)
 }
 
 void putint(int64 _arg, const uint64 _base = 10, const _SLD File_out_no _fd = _SLD stdout) {
-	if (_base > (uint64)64) {
+	if (_base > (uint64)16) {
 		throw _SLD except::unsupported_number_base();
 	}
 	static char representation[] = "0123456789abcdef";
