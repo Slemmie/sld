@@ -39,6 +39,14 @@ template <class IT, class A> void fill(IT _begin, IT _end, const A& _value) noex
 	}
 }
 
+void* malloc(uint64 _size) {
+	return (void*) (new char* [_size]);
+}
+
+void free(void* _ptr) {
+	delete [] ((char*) _ptr);
+}
+
 _SLD_END
 
 #endif /// _SLD_MEMORY_H
