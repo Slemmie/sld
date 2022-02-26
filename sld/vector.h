@@ -12,6 +12,7 @@
 #include <sld/memory.h>
 #include <sld/exception.h>
 #include <sld/algorithm.h>
+#include <sld/utility.h>
 
 _SLD_BEGIN
 
@@ -57,7 +58,10 @@ public:
 	
 	inline void clear() noexcept {
 		if (this->m_data) {
-			delete [] (this->m_data);
+			for (_SLD vector <A>::iterator it = this->begin(); it != this->end(); ++it) {
+				it->~A();
+			}
+			_SLD free(this->m_data);
 			this->m_data = nullptr;
 			this->m_size = this->m_capacity = 0;
 		}
@@ -71,9 +75,9 @@ public:
 		while (new_capacity < _capacity) {
 			new_capacity <<= 1;
 		}
-		A* new_data = new A[new_capacity];
+		A* new_data = (A*) _SLD malloc(sizeof(A) * new_capacity);
 		_SLD memcpy(new_data, this->m_data, sizeof(A) * this->size());
-		delete [] (this->m_data);
+		_SLD free(this->m_data);
 		this->m_data = new_data;
 		this->m_capacity = new_capacity;
 	}
@@ -85,27 +89,41 @@ public:
 			}
 			return;
 		}
-		if (_size <= this->capacity()) {
-			this->m_size = _size;
+		if (_size == this->size()) {
 			return;
 		}
 		this->reserve(_size);
+		uint64 old_size = this->size();
 		this->m_size = _size;
+		for (_SLD vector <A>::iterator it = this->begin() + old_size; it != this->end(); ++it) {
+			new (it) A();
+		}
 	}
 	
 	inline void resize(uint64 _size, const A& _initial) {
 		if (_size < this->size()) {
-			this->resize(_size);
+			while (_size < this->size()) {
+				this->pop_back();
+			}
 			return;
 		}
+		if (_size == this->size()) {
+			return;
+		}
+		this->reserve(_size);
 		uint64 old_size = this->size();
-		this->resize(_size);
+		this->m_size = _size;
 		_SLD fill(this->begin() + old_size, this->end(), _initial);
 	}
 	
 	inline void push_back(const A& _value) noexcept {
 		this->reserve(this->size() + 1);
 		this->m_data[this->m_size++] = _value;
+	}
+	
+	template <typename... ARGS> inline void emplace_back(ARGS&&... _args) {
+		this->reserve(this->size() + 1);
+		new (&this->m_data[this->m_size++]) A(_args...);
 	}
 	
 	inline void pop_back() {
@@ -117,12 +135,18 @@ public:
 	
 	inline void insert(_SLD vector <A>::iterator _ptr, const A& _value) {
 		uint64 index_before_resize = _ptr - this->begin();
-		this->resize(this->size() + 1);
-		_ptr = this->begin() + index_before_resize;
+		this->push_back(_value);
 		for (_SLD vector <A>::iterator it = this->end(); it != _ptr + 1; --it) {
-			*(it - 1) = *(it - 2);
+			_SLD swap(*(it - 1), *(it - 2));
 		}
-		*_ptr = _value;
+	}
+	
+	template <typename... ARGS> inline void emplace(_SLD vector <A>::iterator _ptr, ARGS&&... _args) {
+		uint64 index_before_resize = _ptr - this->begin();
+		this->emplace_back(_args...);
+		for (_SLD vector <A>::iterator it = this->end(); it != _ptr + 1; --it) {
+			_SLD swap(*(it - 1), *(it - 2));
+		}
 	}
 	
 	inline void insert(_SLD vector <A>::iterator _ptr,
@@ -132,17 +156,33 @@ public:
 		this->resize(this->size() + required_size);
 		_ptr = this->begin() + index_before_resize;
 		for (_SLD vector <A>::iterator it = this->end(); it != _ptr + required_size; --it) {
-			*(it - 1) = *(it - required_size - 1);
+			_SLD swap(*(it - 1), *(it - required_size - 1));
 		}
 		_SLD memcpy(_ptr, _begin, sizeof(A) * required_size);
+	}
+	
+	inline void insert(_SLD vector <A>::iterator _ptr, uint64 _count, const A& _value) {
+		uint64 index_before_resize = _ptr - this->begin();
+		this->resize(this->size() + _count);
+		_ptr = this->begin() + index_before_resize;
+		for (_SLD vector <A>::iterator it = this->end() - _count - 1; it + 1 != _ptr; --it) {
+			_SLD swap(*it, *(it + _count));
+		}
+		for (_SLD vector <A>::iterator it = _ptr; it != _ptr + _count; ++it) {
+			*it = A(_value);
+		}
 	}
 	
 	inline void erase(_SLD vector <A>::iterator _ptr) {
 		if (_ptr < this->begin() || _ptr >= this->end()) {
 			this->m_throw_bounds();
 		}
-		for (_SLD vector <A>::iterator it = _ptr; it + 1 != this->end(); ++it) {
-			*it = *(it + 1);
+		if (_ptr + 1 == this->end()) {
+			this->pop_back();
+			return;
+		}
+		for (_SLD vector <A>::iterator it = _ptr + 1; it + 1 != this->end(); ++it) {
+			_SLD swap(*it, *(it + 1));
 		}
 		this->pop_back();
 	}
@@ -153,7 +193,7 @@ public:
 		}
 		uint64 required_size = _end - _begin;
 		for (_SLD vector <A>::iterator it = _end; it != this->end(); ++it) {
-			*(it - required_size) = *it;
+			_SLD swap(*it, *(it - required_size));
 		}
 		for (uint64 i = 0; i < required_size; i++) {
 			this->pop_back();
@@ -164,7 +204,7 @@ public:
 		this->clear();
 		this->m_size = _vector.size();
 		this->m_capacity = _vector.capacity();
-		this->m_data = new A[this->capacity()];
+		this->m_data = (A*) _SLD malloc(this->capacity());
 		_SLD memcpy(this->m_data, _vector.begin(), sizeof(A) * _vector.size());
 	}
 	
@@ -257,12 +297,6 @@ private:
 	
 	uint64 m_size;
 	uint64 m_capacity;
-	
-private:
-	
-	constexpr bool m_fits(const uint64 _new_size) const noexcept {
-		return _new_size < this->capacity();
-	}
 	
 private:
 	
