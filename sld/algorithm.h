@@ -32,6 +32,11 @@ template <class A, class CMP> inline const A& max(const A& v1, const A& v2, cons
 
 // end min/max functions
 
+// returns absolute value of arg, required < operator and - operator
+template <class A> inline const A& abs(const A& _v1) {
+	return _SLD max(_v1, -_v1);
+}
+
 _SLD_END
 
 #endif /// _SLD_ALGORITHM_H
