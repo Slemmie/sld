@@ -39,11 +39,11 @@ template <class IT, class A> void fill(IT _begin, IT _end, const A& _value) noex
 	}
 }
 
-void* malloc(uint64 _size) {
+void* malloc(uint64 _size) noexcept {
 	return (void*) (new char* [_size]);
 }
 
-void free(void* _ptr) {
+void free(void* _ptr) noexcept {
 	delete [] ((char*) _ptr);
 	_ptr = nullptr;
 }
