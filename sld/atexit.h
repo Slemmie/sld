@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef _SLD_ALGORITHM_H
-#define _SLD_ALGORITHM_H
+#ifndef _SLD_ATEXIT_H
+#define _SLD_ATEXIT_H
 
 #include <sld/core.h>
 #include <sld/types.h>
@@ -57,4 +57,4 @@ inline bool atexit(void (*_function) (void)) noexcept {
 
 _SLD_END
 
-#endif /// _SLD_ALGORITHM_H
+#endif /// _SLD_ATEXIT_H
