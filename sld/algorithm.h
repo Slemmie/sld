@@ -14,20 +14,20 @@ _SLD_BEGIN
 // begin min/max functions
 // custom comparators should return whether arg1 < arg2, regardless of use of min()/max()
 
-template <class A> inline const A& min(const A& v1, const A& v2) {
-	return v2 < v1 ? v2 : v1;
+template <class A> inline const A& min(const A& _v1, const A& _v2) {
+	return _v2 < _v1 ? _v2 : _v1;
 }
 
-template <class A, class CMP> inline const A& min(const A& v1, const A& v2, const CMP& cmp) {
-	return cmp(v2, v1) ? v2 : v1;
+template <class A, class CMP> inline const A& min(const A& _v1, const A& _v2, const CMP& _cmp) {
+	return _cmp(_v2, _v1) ? _v2 : _v1;
 }
 
-template <class A> inline const A& max(const A& v1, const A& v2) {
-	return v1 < v2 ? v2 : v1;
+template <class A> inline const A& max(const A& _v1, const A& _v2) {
+	return _v1 < _v2 ? _v2 : _v1;
 }
 
-template <class A, class CMP> inline const A& max(const A& v1, const A& v2, const CMP& cmp) {
-	return cmp(v1, v2) ? v2 : v1;
+template <class A, class CMP> inline const A& max(const A& _v1, const A& _v2, const CMP& _cmp) {
+	return cmp(_v1, _v2) ? _v2 : _v1;
 }
 
 // end min/max functions
