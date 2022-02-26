@@ -45,6 +45,7 @@ void* malloc(uint64 _size) {
 
 void free(void* _ptr) {
 	delete [] ((char*) _ptr);
+	_ptr = nullptr;
 }
 
 _SLD_END
