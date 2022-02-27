@@ -33,103 +33,32 @@ protected:
 
 namespace except {
 	
-	class out_of_bounds : public _SLD exception {
-		
-	public:
-		
-		out_of_bounds() noexcept :
-		_SLD exception("index out of range")
-		{ }
-		
-		out_of_bounds(const char* _message) noexcept :
-		_SLD exception(_message)
-		{ }
-		
-	};
+#define _SLD_MAKE_EXCEPTION(_class_name, _default_message)                    \
+class _class_name : public _SLD exception {                                   \
+	                                                                          \
+public:                                                                       \
+	                                                                          \
+	_class_name() noexcept : _SLD exception(_default_message) { }             \
+	                                                                          \
+	_class_name(const char* _message) noexcept : _SLD exception(_message) { } \
+	                                                                          \
+};
 	
-	class stdout_buffer_pointer_overflow : public _SLD exception {
-		
-	public:
-		
-		stdout_buffer_pointer_overflow() noexcept :
-		_SLD exception("stdout buffer pointer overflow")
-		{ }
-		
-		stdout_buffer_pointer_overflow(const char* _message) noexcept :
-		_SLD exception(_message)
-		{ }
-		
-	};
+	_SLD_MAKE_EXCEPTION(out_of_bounds, "index out of range")
 	
-	class stderr_buffer_pointer_overflow : public _SLD exception {
-		
-	public:
-		
-		stderr_buffer_pointer_overflow() noexcept :
-		_SLD exception("stderr buffer pointer overflow")
-		{ }
-		
-		stderr_buffer_pointer_overflow(const char* _message) noexcept :
-		_SLD exception(_message)
-		{ }
-		
-	};
+	_SLD_MAKE_EXCEPTION(stdout_buffer_pointer_overflow, "stdout buffer pointer overflow")
 	
-	class unsupported_number_base : public _SLD exception {
-		
-	public:
-		
-		unsupported_number_base() noexcept :
-		_SLD exception("unsupported number base")
-		{ }
-		
-		unsupported_number_base(const char* _message) noexcept :
-		_SLD exception(_message)
-		{ }
-		
-	};
+	_SLD_MAKE_EXCEPTION(stderr_buffer_pointer_overflow, "stderr buffer pointer overflow")
 	
-	class stdout_putint_overflow : public _SLD exception {
-		
-	public:
-		
-		stdout_putint_overflow() noexcept :
-		_SLD exception("stdout putint() overflow")
-		{ }
-		
-		stdout_putint_overflow(const char* _message) noexcept :
-		_SLD exception(_message)
-		{ }
-		
-	};
+	_SLD_MAKE_EXCEPTION(unsupported_number_base, "unsupported number base")
 	
-	class invalid_put_args : public _SLD exception {
-		
-	public:
-		
-		invalid_put_args() noexcept :
-		_SLD exception("stdout putint() overflow")
-		{ }
-		
-		invalid_put_args(const char* _message) noexcept :
-		_SLD exception(_message)
-		{ }
-		
-	};
+	_SLD_MAKE_EXCEPTION(stdout_putint_overflow, "stdout putint() overflow")
 	
-	class unsupported_file_desciptor : public _SLD exception {
-		
-	public:
-		
-		unsupported_file_desciptor() noexcept :
-		_SLD exception("unsupported file desciptor")
-		{ }
-		
-		unsupported_file_desciptor(const char* _message) noexcept :
-		_SLD exception(_message)
-		{ }
-		
-	};
+	_SLD_MAKE_EXCEPTION(invalid_put_args, "stdout putint() overflow")
+	
+	_SLD_MAKE_EXCEPTION(unsupported_file_desciptor, "unsupported file desciptor")
+	
+#undef _SLD_MAKE_EXCEPTION
 	
 } /// namespace except
 
