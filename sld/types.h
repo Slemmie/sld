@@ -34,6 +34,8 @@ typedef long double double12;
 typedef uint8        byte;
 typedef  int8 signed_byte;
 
+typedef uint64 size_t;
+
 _SLD_END
 
 #endif /// _SLD_TYPES_H

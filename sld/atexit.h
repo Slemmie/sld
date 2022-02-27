@@ -47,7 +47,7 @@ private:
 	}
 	
 	static inline void (*m_functions[_SLD_ATEXIT_BUFFER_SIZE]) (void);
-	static inline uint64 m_ptr = 0;
+	static inline _SLD size_t m_ptr = 0;
 	
 };
 

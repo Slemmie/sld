@@ -54,7 +54,7 @@ inline char getchar(const _SLD file_in_no _fd = _SLD stdin) {
 }
 
 inline void getchars(char* _buffer, const _SLD file_in_no _fd = _SLD stdin) {
-	uint64 i = 0;
+	_SLD size_t i = 0;
 	char ch;
 	do {
 		_buffer[i++] = ch = _SLD getchar(_fd);
@@ -62,8 +62,8 @@ inline void getchars(char* _buffer, const _SLD file_in_no _fd = _SLD stdin) {
 	_buffer[i - 1] = '\0';
 }
 
-template <class A = int32> inline A getint(const uint64 _base = 10, const _SLD file_in_no _fd = _SLD stdin) {
-	if (_base > (uint64)16) {
+template <class A = int32> inline A getint(const _SLD size_t _base = 10, const _SLD file_in_no _fd = _SLD stdin) {
+	if (_base > (_SLD size_t)16) {
 		throw _SLD except::unsupported_number_base();
 	}
 	char ch = getchar(_fd);
@@ -119,7 +119,7 @@ void scanf(const char* _format) { }
 
 template <class ARG, class... ARGS>
 void scanf(const char* _format, ARG* _arg, ARGS*... _args) {
-	for (uint64 i = 0; _format[i] != '\0'; i++) {
+	for (_SLD size_t i = 0; _format[i] != '\0'; i++) {
 		if (_format[i] != '%') {
 			_SLD getchar();
 			continue;

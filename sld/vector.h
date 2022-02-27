@@ -16,6 +16,8 @@
 
 _SLD_BEGIN
 
+#define _SIZE_TYPE _SLD size_t
+
 template <class A> class vector {
 	
 public:
@@ -28,7 +30,7 @@ public:
 	m_capacity(0)
 	{ }
 	
-	vector(uint64 _size) :
+	vector(_SIZE_TYPE _size) :
 	m_data(nullptr),
 	m_size(0),
 	m_capacity(0)
@@ -36,7 +38,7 @@ public:
 		this->resize(_size);
 	}
 	
-	vector(uint64 _size, const A& _initial) :
+	vector(_SIZE_TYPE _size, const A& _initial) :
 	m_data(nullptr),
 	m_size(0),
 	m_capacity(0)
@@ -67,11 +69,11 @@ public:
 		}
 	}
 	
-	inline void reserve(uint64 _capacity) noexcept {
+	inline void reserve(_SIZE_TYPE _capacity) noexcept {
 		if (_capacity <= this->capacity()) {
 			return;
 		}
-		uint64 new_capacity = _SLD max(uint64(1), this->capacity());
+		_SIZE_TYPE new_capacity = _SLD max(_SIZE_TYPE(1), this->capacity());
 		while (new_capacity < _capacity) {
 			new_capacity <<= 1;
 		}
@@ -82,7 +84,7 @@ public:
 		this->m_capacity = new_capacity;
 	}
 	
-	inline void resize(uint64 _size) {
+	inline void resize(_SIZE_TYPE _size) {
 		if (_size < this->size()) {
 			while (_size < this->size()) {
 				this->pop_back();
@@ -93,14 +95,14 @@ public:
 			return;
 		}
 		this->reserve(_size);
-		uint64 old_size = this->size();
+		_SIZE_TYPE old_size = this->size();
 		this->m_size = _size;
 		for (_SLD vector <A>::iterator it = this->begin() + old_size; it != this->end(); ++it) {
 			new (it) A();
 		}
 	}
 	
-	inline void resize(uint64 _size, const A& _initial) {
+	inline void resize(_SIZE_TYPE _size, const A& _initial) {
 		if (_size < this->size()) {
 			while (_size < this->size()) {
 				this->pop_back();
@@ -111,7 +113,7 @@ public:
 			return;
 		}
 		this->reserve(_size);
-		uint64 old_size = this->size();
+		_SIZE_TYPE old_size = this->size();
 		this->m_size = _size;
 		_SLD fill(this->begin() + old_size, this->end(), _initial);
 	}
@@ -134,7 +136,7 @@ public:
 	}
 	
 	inline void insert(_SLD vector <A>::iterator _ptr, const A& _value) {
-		uint64 index_before_resize = _ptr - this->begin();
+		_SIZE_TYPE index_before_resize = _ptr - this->begin();
 		this->push_back(_value);
 		for (_SLD vector <A>::iterator it = this->end(); it != _ptr + 1; --it) {
 			_SLD swap(*(it - 1), *(it - 2));
@@ -142,7 +144,7 @@ public:
 	}
 	
 	template <typename... ARGS> inline void emplace(_SLD vector <A>::iterator _ptr, ARGS&&... _args) {
-		uint64 index_before_resize = _ptr - this->begin();
+		_SIZE_TYPE index_before_resize = _ptr - this->begin();
 		this->emplace_back(_args...);
 		for (_SLD vector <A>::iterator it = this->end(); it != _ptr + 1; --it) {
 			_SLD swap(*(it - 1), *(it - 2));
@@ -151,8 +153,8 @@ public:
 	
 	inline void insert(_SLD vector <A>::iterator _ptr,
 	const _SLD vector <A>::iterator _begin, const _SLD vector <A>::iterator _end) {
-		uint64 required_size = _end - _begin;
-		uint64 index_before_resize = _ptr - this->begin();
+		_SIZE_TYPE required_size = _end - _begin;
+		_SIZE_TYPE index_before_resize = _ptr - this->begin();
 		this->resize(this->size() + required_size);
 		_ptr = this->begin() + index_before_resize;
 		for (_SLD vector <A>::iterator it = this->end(); it != _ptr + required_size; --it) {
@@ -161,8 +163,8 @@ public:
 		_SLD memcpy(_ptr, _begin, sizeof(A) * required_size);
 	}
 	
-	inline void insert(_SLD vector <A>::iterator _ptr, uint64 _count, const A& _value) {
-		uint64 index_before_resize = _ptr - this->begin();
+	inline void insert(_SLD vector <A>::iterator _ptr, _SIZE_TYPE _count, const A& _value) {
+		_SIZE_TYPE index_before_resize = _ptr - this->begin();
 		this->resize(this->size() + _count);
 		_ptr = this->begin() + index_before_resize;
 		for (_SLD vector <A>::iterator it = this->end() - _count - 1; it + 1 != _ptr; --it) {
@@ -191,11 +193,11 @@ public:
 		if (_begin < this->begin() || _end > this->end() || _begin > _end) {
 			this->m_throw_bounds();
 		}
-		uint64 required_size = _end - _begin;
+		_SIZE_TYPE required_size = _end - _begin;
 		for (_SLD vector <A>::iterator it = _end; it != this->end(); ++it) {
 			_SLD swap(*it, *(it - required_size));
 		}
-		for (uint64 i = 0; i < required_size; i++) {
+		for (_SIZE_TYPE i = 0; i < required_size; i++) {
 			this->pop_back();
 		}
 	}
@@ -213,22 +215,22 @@ public:
 		return *this;
 	}
 	
-	constexpr const A& operator [] (const uint64 _index) const noexcept {
+	constexpr const A& operator [] (const _SIZE_TYPE _index) const noexcept {
 		return this->m_data[_index];
 	}
 	
-	inline A& operator [] (const uint64 _index) noexcept {
+	inline A& operator [] (const _SIZE_TYPE _index) noexcept {
 		return this->m_data[_index];
 	}
 	
-	constexpr const A& at(const uint64 _index) const {
+	constexpr const A& at(const _SIZE_TYPE _index) const {
 		if (_index >= this->size()) {
 			this->m_throw_bounds();
 		}
 		return this->m_data[_index];
 	}
 	
-	inline A& at(const uint64 _index) {
+	inline A& at(const _SIZE_TYPE _index) {
 		if (_index >= this->size()) {
 			this->m_throw_bounds();
 		}
@@ -279,7 +281,7 @@ public:
 		return this->m_data + this->size();
 	}
 	
-	constexpr uint64 size() const noexcept {
+	constexpr _SIZE_TYPE size() const noexcept {
 		return this->m_size;
 	}
 	
@@ -287,7 +289,7 @@ public:
 		return !(bool)this->m_size;
 	}
 	
-	constexpr uint64 capacity() const noexcept {
+	constexpr _SIZE_TYPE capacity() const noexcept {
 		return this->m_capacity;
 	}
 	
@@ -295,8 +297,8 @@ private:
 	
 	A* m_data;
 	
-	uint64 m_size;
-	uint64 m_capacity;
+	_SIZE_TYPE m_size;
+	_SIZE_TYPE m_capacity;
 	
 private:
 	
@@ -305,6 +307,8 @@ private:
 	}
 	
 };
+
+#undef _SIZE_TYPE
 
 _SLD_END
 

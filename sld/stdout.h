@@ -29,7 +29,7 @@ _SLD_BEGIN
 struct _sld_stdout_buffer {
 	
 	static inline char buffer[_SLD_STDOUT_BUFFER_SIZE];
-	static inline uint64 ptr = 0;
+	static inline _SLD size_t ptr = 0;
 	
 	_sld_stdout_buffer() = delete;
 	
@@ -38,7 +38,7 @@ struct _sld_stdout_buffer {
 struct _sld_stderr_buffer {
 	
 	static inline char buffer[_SLD_STDERR_BUFFER_SIZE];
-	static inline uint64 ptr = 0;
+	static inline _SLD size_t ptr = 0;
 	
 	_sld_stderr_buffer() = delete;
 	
@@ -98,13 +98,13 @@ inline void putchar(const char _ch, const _SLD file_out_no _fd = _SLD stdout) {
 }
 
 inline void putchars(const char* _chs, const _SLD file_out_no _fd = _SLD stdout) {
-	for (uint64 i = 0; _chs[i] != '\0'; i++) {
+	for (_SLD size_t i = 0; _chs[i] != '\0'; i++) {
 		_SLD putchar(_chs[i], _fd);
 	}
 }
 
-void putint(int64 _arg, const uint64 _base = 10, const _SLD file_out_no _fd = _SLD stdout) {
-	if (_base > (uint64)16) {
+void putint(int64 _arg, const _SLD size_t _base = 10, const _SLD file_out_no _fd = _SLD stdout) {
+	if (_base > (_SLD size_t)16) {
 		throw _SLD except::unsupported_number_base();
 	}
 	static char representation[] = "0123456789abcdef";
@@ -131,7 +131,7 @@ void putfloat(double12 _arg, const uint64 _precision = 3, const _SLD file_out_no
 		_SLD putchar('-', _fd);
 		_arg = -_arg;
 	}
-	uint64 digs_before = 0;
+	_SLD size_t digs_before = 0;
 	double12 before_exp = double12(1);
 	double12 tmp = _arg;
 	do {
@@ -177,11 +177,11 @@ template <> inline void _sld_putchars <char*>
 template <class... ARGS> inline void _sld_putchars
 (ARGS... _args) { throw _SLD except::invalid_put_args(); }
 
-#define _sld_overload(TYPE)                           \
-template <> inline void _sld_putint <TYPE>            \
-(const TYPE& _arg) { _SLD putint(_arg, (uint64)10); } \
-template <> inline void _sld_putint <TYPE, uint64>    \
-(const TYPE& _arg, const uint64& _base) { _SLD putint(_arg, _base); }
+#define _sld_overload(TYPE)                                \
+template <> inline void _sld_putint <TYPE>                 \
+(const TYPE& _arg) { _SLD putint(_arg, (_SLD size_t)10); } \
+template <> inline void _sld_putint <TYPE, _SLD size_t>    \
+(const TYPE& _arg, const _SLD size_t& _base) { _SLD putint(_arg, _base); }
 template <class... ARGS> inline void _sld_putint(const ARGS&... _args);
 _sld_overload( uint8)
 _sld_overload(  int8)
@@ -212,7 +212,7 @@ template <class... ARGS> inline void _sld_putfloat
 
 template <class ARG, class... ARGS>
 void printf(const char* _format, const ARG& _arg, const ARGS&... _args) {
-	for (uint64 i = 0; _format[i] != '\0'; i++) {
+	for (_SLD size_t i = 0; _format[i] != '\0'; i++) {
 		if (_format[i] != '%') {
 			_sld_putchar(_format[i]);
 			continue;
@@ -234,11 +234,11 @@ void printf(const char* _format, const ARG& _arg, const ARGS&... _args) {
 				_SLD printf(_format + ++i, _args...);
 				return;
 			case 'o':
-				_SLD _sld_putint(_arg, (uint64)8);
+				_SLD _sld_putint(_arg, (_SLD size_t)8);
 				_SLD printf(_format + ++i, _args...);
 				return;
 			case 'x':
-				_SLD _sld_putint(_arg, (uint64)16);
+				_SLD _sld_putint(_arg, (_SLD size_t)16);
 				_SLD printf(_format + ++i, _args...);
 				return;
 			case '%':
@@ -293,9 +293,9 @@ template <class... ARGS> inline void _sld_putchars
 
 #define _sld_overload(TYPE)                           \
 template <> inline void _sld_putint <TYPE>            \
-(const _SLD file_out_no _fd, const TYPE& _arg) { _SLD putint(_arg, (uint64)10, _fd); } \
-template <> inline void _sld_putint <TYPE, uint64>    \
-(const _SLD file_out_no _fd, const TYPE& _arg, const uint64& _base) { _SLD putint(_arg, _base, _fd); }
+(const _SLD file_out_no _fd, const TYPE& _arg) { _SLD putint(_arg, (_SLD size_t)10, _fd); } \
+template <> inline void _sld_putint <TYPE, _SLD size_t>    \
+(const _SLD file_out_no _fd, const TYPE& _arg, const _SLD size_t& _base) { _SLD putint(_arg, _base, _fd); }
 template <class... ARGS> inline void _sld_putint(const _SLD file_out_no _fd, const ARGS&... _args);
 _sld_overload( uint8)
 _sld_overload(  int8)
@@ -327,7 +327,7 @@ template <class... ARGS> inline void _sld_putfloat
 
 template <class ARG, class... ARGS>
 void printf(const _SLD file_out_no _fd, const char* _format, const ARG& _arg, const ARGS&... _args) {
-	for (uint64 i = 0; _format[i] != '\0'; i++) {
+	for (_SLD size_t i = 0; _format[i] != '\0'; i++) {
 		if (_format[i] != '%') {
 			_sld_putchar(_fd, _format[i]);
 			continue;
@@ -349,11 +349,11 @@ void printf(const _SLD file_out_no _fd, const char* _format, const ARG& _arg, co
 				_SLD printf(_fd, _format + ++i, _args...);
 				return;
 			case 'o':
-				_SLD _sld_putint(_fd, _arg, (uint64)8);
+				_SLD _sld_putint(_fd, _arg, (_SLD size_t)8);
 				_SLD printf(_fd, _format + ++i, _args...);
 				return;
 			case 'x':
-				_SLD _sld_putint(_fd, _arg, (uint64)16);
+				_SLD _sld_putint(_fd, _arg, (_SLD size_t)16);
 				_SLD printf(_fd, _format + ++i, _args...);
 				return;
 			case '%':
