@@ -1,5 +1,7 @@
 # sld
-Inefficient alternative to the C++ STL. Implemented without any C STL/C++ STL/etc. headers - though with occasional system headers such as "unistd.h".
+Inefficient alternative to the C++ STL. Implemented without any C STL/C++ STL/etc. headers* - though with occasional system headers such as "unistd.h".
+
+[*]: Single use of the ```<new>``` header in sld/memory.h as it defines the placement new operator which must not be defined elsewhere as per C++ language standards.
 
 For now, everything is header-only. Everything is tested on linux, but should work almost anywhere.
 
