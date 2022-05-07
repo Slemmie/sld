@@ -10,6 +10,11 @@
 #include <sld/core.h>
 #include <sld/types.h>
 
+// cannot get around needing this single stl header
+// it defines the placement new operator
+// it is the only function that must not be defined outside of the stl library
+#include <new>
+
 _SLD_BEGIN
 
 #define _SIZE_TYPE _SLD size_t
