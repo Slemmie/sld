@@ -1,13 +1,5 @@
-# # # # # # # # # # # # # # # # # # # #
-# makefile targets unix-like systems. #
-# # # # # # # # # # # # # # # # # # # #
-
-  #############################
-  #       export target       #
-  # (make globally available) #
-  #############################
-
+# make contents globally aviailable
 export:
-	if [ -d "/usr/local/include/sld/" ]; then rm -rf /usr/local/include/sld/; fi;
+	rm -rf /usr/local/include/sld/
 	mkdir -p /usr/local/include/sld/
 	cp -r ./sld/* /usr/local/include/sld/
